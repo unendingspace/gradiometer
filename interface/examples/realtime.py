@@ -54,39 +54,23 @@ class CustomMainWindow(QtGui.QMainWindow):
         self.FRAME_A.setLayout(self.LAYOUT_A)
         self.setCentralWidget(self.FRAME_A)
 
-        # Place the zoom button
-        self.zoomBtn = QtGui.QPushButton(text = 'zoom')
-        setCustomSize(self.zoomBtn, 100, 50)
-        self.zoomBtn.clicked.connect(self.zoomBtnAction)
-        self.LAYOUT_A.addWidget(self.zoomBtn, *(0,0))
-
         # Place the matplotlib figure
         self.myFig = CustomFigCanvas()
         self.LAYOUT_A.addWidget(self.myFig, *(0,1))
 
         # Add the callbackfunc to ..
-        myDataLoop = threading.Thread(name = 'myDataLoop', target = dataSendLoop, args = (self.addData_callbackFunc,))
+        myDataLoop = threading.Thread(name = 'myDataLoop', target = dataSendLoop, args = (self.addData_line1, self.addData_line2,))
         myDataLoop.daemon = True
         myDataLoop.start()
 
         self.show()
 
-    ''''''
+    def addData_line1(self, value):
+        self.myFig.addData1(value)
 
+    def addData_line2(self, value):
+        self.myFig.addData2(value)
 
-    def zoomBtnAction(self):
-        print("zoom in")
-        self.myFig.zoomIn(5)
-
-    ''''''
-
-    def addData_callbackFunc(self, value):
-        # print("Add data: " + str(value))
-        self.myFig.addData(value)
-
-
-
-''' End Class '''
 
 
 class CustomFigCanvas(FigureCanvas, TimedAnimation):
@@ -94,20 +78,16 @@ class CustomFigCanvas(FigureCanvas, TimedAnimation):
     def __init__(self):
 
         self.addedData = []
+        self.addedData2 = []
         print(matplotlib.__version__)
-
+        
+        
         # The data
         self.xlim = 200
         self.n = np.linspace(0, self.xlim - 1, self.xlim)
-        a = []
-        b = []
-        a.append(2.0)
-        a.append(4.0)
-        a.append(2.0)
-        b.append(4.0)
-        b.append(3.0)
-        b.append(4.0)
-        self.y = (self.n * 0.0) + 50
+        self.y = (self.n * 0.0)
+        self.y2 = (self.n * 0.0)
+        
 
         # The window
         self.fig = Figure(figsize=(5,5), dpi=100)
@@ -118,47 +98,40 @@ class CustomFigCanvas(FigureCanvas, TimedAnimation):
         self.ax1.set_xlabel('time')
         self.ax1.set_ylabel('raw data')
         self.line1 = Line2D([], [], color='blue')
-        self.line1_tail = Line2D([], [], color='red', linewidth=2)
-        self.line1_head = Line2D([], [], color='red', marker='o', markeredgecolor='r')
+        self.line2 = Line2D([], [], color='red')
         self.ax1.add_line(self.line1)
-        self.ax1.add_line(self.line1_tail)
-        self.ax1.add_line(self.line1_head)
+        self.ax1.add_line(self.line2)
         self.ax1.set_xlim(0, self.xlim - 1)
-        self.ax1.set_ylim(0, 100)
+        self.ax1.set_ylim(0, 5)
 
 
         FigureCanvas.__init__(self, self.fig)
-        TimedAnimation.__init__(self, self.fig, interval = 50, blit = True)
+        TimedAnimation.__init__(self, self.fig, interval = 100, blit = True)
 
     def new_frame_seq(self):
         return iter(range(self.n.size))
 
     def _init_draw(self):
-        lines = [self.line1, self.line1_tail, self.line1_head]
+
+        # Remember to add lines to be drawn here!
+        lines = [self.line1]
         for l in lines:
             l.set_data([], [])
 
-    def addData(self, value):
+    def addData1(self, value):
         self.addedData.append(value)
 
-    def zoomIn(self, value):
-        bottom = self.ax1.get_ylim()[0]
-        top = self.ax1.get_ylim()[1]
-        bottom += value
-        top -= value
-        self.ax1.set_ylim(bottom,top)
-        self.draw()
-
+    def addData2(self, value):
+        self.addedData2.append(value)
 
     def _step(self, *args):
         # Extends the _step() method for the TimedAnimation class.
         try:
             TimedAnimation._step(self, *args)
         except Exception as e:
-            self.abc += 1
-            print(str(self.abc))
             TimedAnimation._stop(self)
             pass
+       
 
     def _draw_frame(self, framedata):
         margin = 2
@@ -167,11 +140,14 @@ class CustomFigCanvas(FigureCanvas, TimedAnimation):
             self.y[-1] = self.addedData[0]
             del(self.addedData[0])
 
+        while(len(self.addedData2) > 0):
+            self.y2 = np.roll(self.y2, -1)
+            self.y2[-1] = self.addedData2[0]
+            del(self.addedData2[0])
 
-        self.line1.set_data(self.n[ 0 : self.n.size - margin ], self.y[ 0 : self.n.size - margin ])
-        self.line1_tail.set_data(np.append(self.n[-10:-1 - margin], self.n[-1 - margin]), np.append(self.y[-10:-1 - margin], self.y[-1 - margin]))
-        self.line1_head.set_data(self.n[-1 - margin], self.y[-1 - margin])
-        self._drawn_artists = [self.line1, self.line1_tail, self.line1_head]
+
+        self.line1.set_data(self.n[ 0 : self.xlim - margin ], self.y[ 0 : self.xlim - margin ])
+        self.line2.set_data(self.n[ 0 : self.xlim - margin ], self.y2[ 0 : self.xlim - margin ])
 
 
 
@@ -189,22 +165,21 @@ class Communicate(QtCore.QObject):
 
 
 
-def dataSendLoop(addData_callbackFunc):
+def dataSendLoop(slot1, slot2):
     # Setup the signal-slot mechanism.
     mySrc = Communicate()
-    mySrc.data_signal.connect(addData_callbackFunc)
+    mySrc.data_signal.connect(slot1)
 
-    # Simulate some data
-    n = np.linspace(0, 499, 500)
-    y = 50 + 25*(np.sin(n / 8.3)) + 10*(np.sin(n / 7.5)) - 5*(np.sin(n / 1.5))
-    i = 0
+    mySrc2 = Communicate()
+    mySrc2.data_signal.connect(slot2)
 
-    while(True):
-        if(i > 499):
-            i = 0
-        time.sleep(0.1)
-        mySrc.data_signal.emit(y[i]) # &lt;- Here you emit a signal!
-        i += 1
+    y = [0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3]
+
+    for item in range(1, 61):
+        time.sleep(0.5)
+        mySrc.data_signal.emit(0.5)
+        mySrc2.data_signal.emit(5 - item / 12.0)
+
     ###
 ###
 

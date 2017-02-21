@@ -1,5 +1,11 @@
+# spectramag2graph
+# allows the reading of a spectramag-6 output file (or two) and displaying their results as graphs
+
+
 import matplotlib.pyplot as plt
 import matplotlib as mpl
+
+# reads a spectramag-6 output file into a list of times, x coordinates, y coordinates, and z coordinates
 
 def readFile(filename):
     f = open(filename, 'r')
@@ -17,6 +23,8 @@ def readFile(filename):
     f.close()
     return times, x, y, z
 
+# transmutes time axis to fold in quarters
+
 def quarterTimes(lst):
     max = lst[-1]
     for num, item in enumerate(lst):
@@ -30,12 +38,17 @@ def quarterTimes(lst):
             lst[num] = max - item
     return lst
 
+# transmutes time axis to fold in half
+
 def halfTimes(lst):
     max = lst[-1]
     for num, item in enumerate(lst):
         if (item > max/2):
             lst[num] = max - item
     return lst
+
+# plots fluxgate readings
+# time axis is whole of measurement time
 
 def plotFlux(t, x, y, z):
 
@@ -65,7 +78,12 @@ def plotFlux(t, x, y, z):
     plt.show()
     plt.close()
 
-def plusMinusPlusComb(file1, file2):
+# combines and plots two matching fluxgate readouts in the following manner:
+# x = x1 + x2
+# y = y1 - y2
+# z = z1 + z2
+
+def readout(file1, file2):
     data1 = readFile(file1)
     data2 = readFile(file2)
 
@@ -75,9 +93,9 @@ def plusMinusPlusComb(file1, file2):
 
     for idx in range(0, len(data1)):
         data1[1][idx] = data1[1][idx] + data2[1][idx]
-        data1[2][idx] = data1[2][idx] + data2[2][idx]
+        data1[2][idx] = data1[2][idx] - data2[2][idx]
         data1[3][idx] = data1[3][idx] + data2[3][idx]
 
-    plotFlux(halfTimes(data1[0]), data1[1], data1[2], data1[3])
+    plotFlux(data1[0], data1[1], data1[2], data1[3])
 
-plusMinusPlusComb('/mnt/win/Users/Matthew/Desktop/sfi1.Dat', '/mnt/win/Users/Matthew/Desktop/sfi2.Dat')
+#readout('/mnt/win/Users/Matthew/Desktop/sfi1.Dat', '/mnt/win/Users/Matthew/Desktop/sfi2.Dat')

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+#Saves input 2
+#Starts on cross in start button window
+#pixel 503 519 here
+
+xdotool mousemove 503 519 click 1 sleep 1 mousemove_relative -- 10 -220 click 1 sleep 1 mousemove_relative 0 125 click 1 sleep 1 mousemove_relative 110 0 sleep 1 mousemove_relative 0 10 click 1 sleep 1 key Down key Down sleep 1 mousemove_relative -- 50 -10 click 1 sleep 5 mousemove_relative -- -140 10 click 1 sleep 5 click 1 mousemove_relative -- 50 -60 sleep 5 click 1 sleep 0.05 click 1 sleep 2 mousemove_relative 70 90 click 1 sleep 1 key I key N key 2 sleep 1 key Return sleep 1 key Tab sleep 1 key Return sleep 1 mousemove 503 519

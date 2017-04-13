@@ -83,19 +83,17 @@ def plotFlux(t, x, y, z):
 # y = y1 - y2
 # z = z1 + z2
 
-def readout(file1, file2):
-    data1 = readFile(file1)
-    data2 = readFile(file2)
+def readout(x1, y1, z1, t1, x2, y2, z2, t2):
 
     if (len(data1) != len(data2)):
         print "Error: files do not match"
         return -1
 
     for idx in range(0, len(data1)):
-        data1[1][idx] = data1[1][idx] + data2[1][idx]
-        data1[2][idx] = data1[2][idx] - data2[2][idx]
-        data1[3][idx] = data1[3][idx] + data2[3][idx]
+        x1[idx] = x1[idx] + x2[idx]
+        y1[idx] = y1[idx] - y2[idx]
+        z1[idx] = z1[idx] + z2[idx]
 
-    plotFlux(data1[0], data1[1], data1[2], data1[3])
+    plotFlux(t1, x1, y1, z1)
 
 #readout('/mnt/win/Users/Matthew/Desktop/sfi1.Dat', '/mnt/win/Users/Matthew/Desktop/sfi2.Dat')

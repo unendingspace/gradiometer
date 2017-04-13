@@ -6,27 +6,6 @@ plt.rcParams['toolbar'] = 'None'
 change_start = 500 # sample number where fluxgate movement started
 change_end = 700 # sample number where fluxgate movement ended
 
-def readFile(filename):
-    f = open(filename, 'r')
-    times = []
-    x = []
-    y = []
-    z = []
-    lines = (f.read().split('\n'))[2:-1] #remove first two lines
-    for item in lines:
-        item = item.split('\t')
-        times.append(float(item[0]))
-        if (item[1] == '-1.#INF'):
-            continue
-            # these always occur in threes for some reason, or at least they appear to
-            # also, just skipping the might not be the best approach
-
-        x.append(float(item[1]))
-        y.append(float(item[2]))
-        z.append(float(item[3]))
-    f.close()
-    return times, x, y, z
-
 def average(list):
     count = 0.0
     for item in list:
@@ -102,12 +81,14 @@ def takeSlope(x, y, z, innum):
 
     return dx, dy, dz, innum
 
-def analyze(filenames):
-    for num, filename in enumerate(filenames):
-        readin = readFile(filename)
+# takes list of t x y zs
+# ex. [[t2s], [x1s], [y1s], [z1s], [t2s] etc]
+
+def analyze(readins):
+    for num, readin in enumerate(readins):
         plotFlux(*takeSlope(readin[1], readin[2], readin[3], num + 1))
     plt.show()
     plt.close()
 
-analyze(['/media/ASDF/data/stacked/stacked2_out1.Dat', '/media/ASDF/data/stacked/stacked2_out2.Dat'])
+#analyze(['/media/ASDF/data/stacked/stacked2_out1.Dat', '/media/ASDF/data/stacked/stacked2_out2.Dat'])
 

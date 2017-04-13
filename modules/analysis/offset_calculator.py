@@ -24,16 +24,15 @@ def average(list):
         count += item
     return count / float(len(list))
 
-def findOffset(file):
-    test = readFile(file)
+def findOffset(x, y, z):
 
-    x1 = average(test[1][:change_start])
-    y1 = average(test[2][:change_start])
-    z1 = average(test[3][:change_start])
+    x1 = average(x[:change_start])
+    y1 = average(y[:change_start])
+    z1 = average(z[:change_start])
 
-    x2 = average(test[1][change_end:])
-    y2 = average(test[2][change_end:])
-    z2 = average(test[3][change_end:])
+    x2 = average(x[change_end:])
+    y2 = average(y[change_end:])
+    z2 = average(z[change_end:])
 
     print 'Offsets calculated:'
     print

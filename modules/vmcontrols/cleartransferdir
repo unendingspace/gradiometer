@@ -1,0 +1,3 @@
+#!/bin/bash
+
+xdotool mousemove 503 519 click 1 sleep 1 key Super_L+e sleep 30 key q sleep 5 key Return sleep 10 key Ctrl+a sleep 3 key Delete sleep 1 key Return sleep 1 

@@ -7,18 +7,20 @@ from os import system
 from time import sleep
 
 def saveInputs(): 
-    system('./savein1')
+    system('vmcontrols/savein1')
     sleep(60)
-    system('./savein2')
+    system('vmcontrols/savein2')
     sleep(30)
 
 def startSpectramag6():
-    system('./startsm6')
+    system('vmcontrols/startsm6')
     sleep(5)
 
 def hostClearTransferDir():
     system('rm -f /home/gradio/transferdir/*')
 
 def guestClearTransferDir():
-    print system('./cleartransferdir') 
+    system('vmcontrols/cleartransferdir') 
 
+def startTest():
+	print "Not set up yet"

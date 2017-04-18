@@ -40,6 +40,6 @@ myStepper.setSpeed(2)  		# RPM
 def runCycle():
     myStepper.step(200, Adafruit_MotorHAT.BACKWARD, Adafruit_MotorHAT.MICROSTEP)
     sleep(2.5)
-    print "Center of cycle at", datetime.fromtimestamp(time()).strftime('%H:%M')
+    print "Center of cycle at", datetime.fromtimestamp(time()).strftime('%H:%M:%S')
     sleep(2.5)
     myStepper.step(200, Adafruit_MotorHAT.FORWARD, Adafruit_MotorHAT.MICROSTEP)

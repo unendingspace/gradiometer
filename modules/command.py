@@ -44,12 +44,12 @@ def main():
 
 		sleep(5 * int(runstuff)) # for zeroing
 
-		print "Starting motor at", datetime.fromtimestamp(time()).strftime('%H:%M')
+		print "Starting motor at", datetime.fromtimestamp(time()).strftime('%H:%M:%S')
 
 		if runstuff:
 			motor.runCycle()
 
-		print "Stopping motor at", datetime.fromtimestamp(time()).strftime('%H:%M')
+		print "Stopping motor at", datetime.fromtimestamp(time()).strftime('%H:%M:%S')
 
 		sleep(5 * int(runstuff)) # buffer
 
@@ -72,7 +72,7 @@ def main():
 
 			parse.sendFilesToCluster(['/home/mpalmer/test/nohup.out'], 1)
 
-		sleep(10)
+		sleep(3)
 
 		system('clear') # clear screen to reset
 

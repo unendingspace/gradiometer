@@ -37,6 +37,8 @@ def main():
 
 		sleep(5 * int(runstuff)) # for zeroing
 
+                sleep(20) # for running test, not in final release 
+
 		print "Starting motor at", datetime.fromtimestamp(time()).strftime('%H:%M:%S')
 
 		if runstuff:
@@ -65,7 +67,7 @@ def main():
 
 		if savedata:
 
-			parse.sendFilesToCluster(['/home/gradio/ran'], 1)
+			parse.sendFilesToCluster(['/home/gradio/transferdir/IN1.Dat', '/home/gradio/transferdir/IN2.Dat'], runstuff)
 
 		sleep(3)
 

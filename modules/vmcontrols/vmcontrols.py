@@ -23,4 +23,4 @@ def guestClearTransferDir():
     system('vmcontrols/cleartransferdir') 
 
 def startTest():
-	print "Not set up yet"
+    system('vmcontrols/startscan')

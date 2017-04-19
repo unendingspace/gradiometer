@@ -9,7 +9,7 @@ from time import sleep, time
 from datetime import datetime
 from os import system
 
-runstuff = False
+runstuff = True
 testlength = 5 #seconds
 
 def main():
@@ -30,13 +30,6 @@ def main():
 
 		# start fluxgates
 
-		print "Verifying transfer dir clear"
-
-		if runstuff:
-			vm.guestClearTransferDir()
-
-		sleep(5 * int(runstuff))
-
 		print "Starting fluxgates"
 
 		if runstuff:
@@ -47,7 +40,8 @@ def main():
 		print "Starting motor at", datetime.fromtimestamp(time()).strftime('%H:%M:%S')
 
 		if runstuff:
-			motor.runCycle()
+                    print 'Running motor'
+			#motor.runCycle()
 
 		print "Stopping motor at", datetime.fromtimestamp(time()).strftime('%H:%M:%S')
 
@@ -64,13 +58,14 @@ def main():
 		# currently delta analysis, but should be other in production
 
 		if runstuff:
-			in1 = sm6.readFile('/home/gradio/transferdir/')
+                    print 'replace2'
+			#in1 = sm6.readFile('/home/gradio/transferdir/')
 
 		# now save data if desired
 
 		if savedata:
 
-			parse.sendFilesToCluster(['/home/mpalmer/test/nohup.out'], 1)
+			parse.sendFilesToCluster(['/home/gradio/ran'], 1)
 
 		sleep(3)
 

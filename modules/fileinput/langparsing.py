@@ -5,7 +5,7 @@ from time import time
 from datetime import datetime
 
 def ynPrompt(text):
-	usr = raw_input(text + " (y/n)")
+	usr = raw_input(text + " (y/n) ")
 	usr = usr.lower()
 	if (usr == 'y' or usr == 'yes'):
 		return 1
@@ -14,7 +14,7 @@ def ynPrompt(text):
 	else:
 		print "Invalid input; please try again"
 		print 
-		return ynPrompt()
+		return ynPrompt(text)
 
 def getRootName(filename):
 	slash = -1

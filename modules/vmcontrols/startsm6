@@ -4,4 +4,4 @@
 #Start point: center of Windows logo on start button
 #Start pixels: 503 519
 
-xdotool mousemove 503 519 click 1 sleep 1 click 1 sleep 5 mousemove_relative -- 54 -115 click 1 sleep 2 mousemove_relative -- 100 0 click 1 sleep 2 mousemove_relative -- 90 0 click 1 sleep 2 mousemove_relative -- -70 0 click 1 sleep 10 click 1 sleep 1 mousemove 503 519 sleep 1
+xdotool mousemove 503 519 click 1 sleep 1 click 1 sleep 5 mousemove_relative -- 54 -115 click 1 sleep 2 mousemove_relative -- 100 0 click 1 sleep 2 mousemove_relative -- 90 0 click 1 sleep 2 mousemove_relative -- -70 0 click 1 sleep 10 click 1 sleep 1 mousemove 503 519 sleep 1 key Ctrl+Alt+g

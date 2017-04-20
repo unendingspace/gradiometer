@@ -22,5 +22,8 @@ def hostClearTransferDir():
 def guestClearTransferDir():
     system('vmcontrols/cleartransferdir') 
 
+def clearMeasurement():
+    system('vmcontrols/clearmeas')
+
 def startTest():
     system('vmcontrols/startscan')

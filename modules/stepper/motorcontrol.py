@@ -38,16 +38,27 @@ myStepper = mh.getStepper(200, 1)  	# 200 steps/rev, motor port #1
 myStepper.setSpeed(2)  		# RPM
 
 def runInShield():
-    runCycle(615)
+    return runCycle(615) # takes 161 seconds to complete (almost 3 minutes)
 
 def runCycle(steps):
-    print "Starting motor cycle at", datetime.fromtimestamp(time()).strftime('%H:%M:%S')
+	starttime = time()
+    print "Starting motor cycle at", datetime.fromtimestamp(startime).strftime('%H:%M:%S')
 
     myStepper.step(steps, Adafruit_MotorHAT.FORWARD, Adafruit_MotorHAT.MICROSTEP)
+
     sleep(2.5)
-    print "Center of cycle at", datetime.fromtimestamp(time()).strftime('%H:%M:%S')
+
+    halftime = time()
+    print "Center of cycle at", datetime.fromtimestamp(halftime).strftime('%H:%M:%S')
+
     sleep(2.5)
+
     myStepper.step(steps, Adafruit_MotorHAT.BACKWARD, Adafruit_MotorHAT.MICROSTEP)
-    print "Stopping motor cycle at", datetime.fromtimestamp(time()).strftime('%H:%M:%S')
+
+    endtime = time()
+    print "Stopping motor cycle at", datetime.fromtimestamp(endtime).strftime('%H:%M:%S')
+
     turnOffMotors()
+
+    return starttime, halftime, endtime
 

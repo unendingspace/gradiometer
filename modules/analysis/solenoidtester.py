@@ -95,4 +95,4 @@ def readout(filename, axis):
         exit()
 
 
-readout('/home/mpalmer/test1/solenoid_map/side/499mV4mA.Dat', 'y')
+readout('/home/mpalmer/test1/solenoid_map/side/998mV7or8mA.Dat', 'y')

@@ -37,17 +37,15 @@ def main():
 
 		sleep(5 * int(runstuff)) # for zeroing
 
-                sleep(20) # for running test, not in final release 
-
-		print "Starting motor at", datetime.fromtimestamp(time()).strftime('%H:%M:%S')
+		sleep(5 * int(runstuff)) # buffer
 
 		if runstuff:
-                    print 'Running motor'
-			#motor.runCycle()
-
-		print "Stopping motor at", datetime.fromtimestamp(time()).strftime('%H:%M:%S')
+            print 'Running motor'
+			motordata = motor.runInShield()
 
 		sleep(5 * int(runstuff)) # buffer
+
+		sleep(5 * int(runstuff)) # give fluxgates time to save
 
 		# now the measurement is done and the motor has stopped
 
@@ -67,13 +65,24 @@ def main():
 
 		if savedata:
 
-			parse.sendFilesToCluster(['/home/gradio/transferdir/IN1.Dat', '/home/gradio/transferdir/IN2.Dat'], runstuff)
+			f = open('motordata', 'w')
+			f.write('Motor start time: ' + str(motordata[0]))
+			f.write('\n')
+			f.write('Motor reversal time: ' + str(motordata[1]))
+			f.write('\n')
+			f.write('Motor stop time: ' + str(motordata[2]))
+			f.write('\n')
+			f.close()
+
+			parse.sendFilesToCluster(['/home/gradio/transferdir/IN1.Dat', '/home/gradio/transferdir/IN2.Dat', 'motordata'], runstuff)
+
+			system('rm -f motordata')
 
 		sleep(3)
 
-                vm.clearMeasurement()
+        vm.clearMeasurement()
                 
-                sleep(1)
+        sleep(1)
 
 		system('clear') # clear screen to reset
 

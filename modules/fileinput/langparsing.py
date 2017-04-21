@@ -46,10 +46,23 @@ def sendFilesToCluster(filelist, runstuff):
 	files = ' '.join(filelist)
 	dest = username + "@khione.triumf.ca:/ucnscr/" + username + "/gradiodata/" + timestamp + "/"
 
+	if ynPrompt('Would you like to append anything to the destination folder name?') 
+		extra = ''
+		while extra == '':
+			print
+			temp = raw_input('What would you like to add? ')
+			for i in range(0, len(temp)):
+				if temp.isalnum():
+					extra = temp
+				else:
+					print
+					print "Sorry, alphanumeric characters only"
+		dest = dest[:-1] + extra + '/'
+
 	print
 	print "Sending files to", dest
 	print
-	print "You will have to enter your password twice."
+	print "You will have to enter your password several times."
 	print
 
 	if runstuff:

@@ -71,6 +71,10 @@ def main():
 
 		sleep(3)
 
+                vm.clearMeasurement()
+                
+                sleep(1)
+
 		system('clear') # clear screen to reset
 
 		meas = raw_input("Press enter to take a measurement, or type 'exit' to quit \n")

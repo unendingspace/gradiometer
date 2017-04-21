@@ -37,9 +37,17 @@ atexit.register(turnOffMotors)
 myStepper = mh.getStepper(200, 1)  	# 200 steps/rev, motor port #1
 myStepper.setSpeed(2)  		# RPM
 
-def runCycle():
-    myStepper.step(200, Adafruit_MotorHAT.BACKWARD, Adafruit_MotorHAT.MICROSTEP)
+def runInShield():
+    runCycle(615)
+
+def runCycle(steps):
+    print "Starting motor cycle at", datetime.fromtimestamp(time()).strftime('%H:%M:%S')
+
+    myStepper.step(steps, Adafruit_MotorHAT.FORWARD, Adafruit_MotorHAT.MICROSTEP)
     sleep(2.5)
     print "Center of cycle at", datetime.fromtimestamp(time()).strftime('%H:%M:%S')
     sleep(2.5)
-    myStepper.step(200, Adafruit_MotorHAT.FORWARD, Adafruit_MotorHAT.MICROSTEP)
+    myStepper.step(steps, Adafruit_MotorHAT.BACKWARD, Adafruit_MotorHAT.MICROSTEP)
+    print "Stopping motor cycle at", datetime.fromtimestamp(time()).strftime('%H:%M:%S')
+    turnOffMotors()
+

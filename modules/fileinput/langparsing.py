@@ -46,8 +46,9 @@ def sendFilesToCluster(filelist, runstuff):
 	files = ' '.join(filelist)
 	dest = username + "@khione.triumf.ca:/ucnscr/" + username + "/gradiodata/" + timestamp + "/"
 
-	if ynPrompt('Would you like to append anything to the destination folder name?') 
-		extra = ''
+        extra = ''
+
+        if ynPrompt('Would you like to append anything to the destination folder name?'): 
 		while extra == '':
 			print
 			temp = raw_input('What would you like to add? ')
@@ -66,7 +67,7 @@ def sendFilesToCluster(filelist, runstuff):
 	print
 
 	if runstuff:
-		system('ssh ' + username + '@khione.triumf.ca \'mkdir -p /ucnscr/' + username + '/gradiodata/' + timestamp + '\'')
+		system('ssh ' + username + '@khione.triumf.ca \'mkdir -p /ucnscr/' + username + '/gradiodata/' + timestamp + extra + '\'')
 
 	for item in filelist:
 		system('scp ' + item + ' ' + dest)

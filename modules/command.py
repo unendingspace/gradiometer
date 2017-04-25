@@ -40,19 +40,19 @@ def main():
 		sleep(5 * int(runstuff)) # buffer
 
 		if runstuff:
-            print 'Running motor'
-			motordata = motor.runInShield()
+                    print 'Running motor'
+	            motordata = motor.runInShield()
 
 		sleep(5 * int(runstuff)) # buffer
 
-		sleep(5 * int(runstuff)) # give fluxgates time to save
+		sleep(60 * int(runstuff)) # give fluxgates time to save
 
 		# now the measurement is done and the motor has stopped
 
 		if runstuff:
 			vm.saveInputs()
 
-		sleep(10 * int(runstuff)) # extra buffer for read/write safeishness
+		sleep(20 * int(runstuff)) # extra buffer for read/write safeishness
 
 		# do analysis here
 		# currently delta analysis, but should be other in production
@@ -80,13 +80,13 @@ def main():
 
 		sleep(3)
 
-        vm.clearMeasurement()
+                vm.clearMeasurement()
                 
-        sleep(1)
+                sleep(1)
 
-		system('clear') # clear screen to reset
+	        system('clear') # clear screen to reset
 
-		meas = raw_input("Press enter to take a measurement, or type 'exit' to quit \n")
+            	meas = raw_input("Press enter to take a measurement, or type 'exit' to quit \n")
 
 
 

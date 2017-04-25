@@ -6,11 +6,12 @@
 from os import system
 from time import sleep
 
-def saveInputs(): 
-    system('vmcontrols/savein1')
+def saveInputs():
     sleep(60)
     system('vmcontrols/savein2')
-    sleep(30)
+    sleep(60)
+    system('vmcontrols/savein1')
+    sleep(60)
 
 def startSpectramag6():
     system('vmcontrols/startsm6')

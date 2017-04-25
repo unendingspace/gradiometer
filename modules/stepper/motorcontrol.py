@@ -41,8 +41,8 @@ def runInShield():
     return runCycle(615) # takes 161 seconds to complete (almost 3 minutes)
 
 def runCycle(steps):
-	starttime = time()
-    print "Starting motor cycle at", datetime.fromtimestamp(startime).strftime('%H:%M:%S')
+    starttime = time()
+    print "Starting motor cycle at", datetime.fromtimestamp(starttime).strftime('%H:%M:%S')
 
     myStepper.step(steps, Adafruit_MotorHAT.FORWARD, Adafruit_MotorHAT.MICROSTEP)
 

@@ -90,5 +90,6 @@ def analyze(readins):
     plt.show()
     plt.close()
 
-#analyze(['/media/ASDF/data/stacked/stacked2_out1.Dat', '/media/ASDF/data/stacked/stacked2_out2.Dat'])
+if __name__ == '__main__':
+	analyze(['/ucnscr/mpalmer/gradiodata/stacked/stacked1out1.Dat', '/ucnscr/mpalmer/gradiodata/stacked/stacked1_out2.Dat'])
 

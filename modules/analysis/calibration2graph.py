@@ -5,6 +5,8 @@
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 
+halftime = 120
+
 # reads a spectramag-6 output file into a list of times, x coordinates, y coordinates, and z coordinates
 
 def readFile(filename):
@@ -43,14 +45,16 @@ def quarterTimes(lst):
 def halfTimes(lst):
     max = lst[-1]
     for num, item in enumerate(lst):
-        if (item > max/2):
-            lst[num] = max - item
+        if (item > halftime):
+            lst[num] = halftime - item
     return lst
 
 # plots fluxgate readings
 # time axis is whole of measurement time
 
 def plotFlux(t, x, y, z):
+
+    print 'Plotting'
 
     mpl.rcParams['toolbar'] = 'None'
 
@@ -73,10 +77,52 @@ def plotFlux(t, x, y, z):
     plt.ylabel('Flux (nT)')
     plt.plot(t, z, 'g-')
 
-    plt.tight_layout()
+    #plt.tight_layout()
 
     plt.show()
     plt.close()
+
+def analyze(x, y, z, t):
+	# find halftime win max zs
+	max1 = 0
+	max2 = 0
+	t1 = -1
+	t2 = -1
+	for num, item in enumerate(z):
+		if (num < (len(z) / 2)):
+			if item > max1 or t1 < 0:
+				max1 = item
+				t1 = t[num]
+		else:
+			if item > max2 or t2 < 0:
+				max2 = item
+				t2 = t[num]
+
+	h = abs(t1 - t2)
+	halftime = h / 2 + min(t1, t2)
+
+	rougherror = 0 # this will overshoot the correct value (hopefully)
+	for num in range(0, len(z) - 1):
+		rougherror += abs(z[num] - z[num+1])
+	rougherror = rougherror / (len(z) - 1)
+	
+
+	min1 = 'a'
+	min2 = 'a'
+	for num, item in enumerate(z):
+		if num < len(z)/4:
+			if min1 == 'a':
+				min1 = item
+			elif item < min1:
+				min1 = item
+		if num > len(z)*3/4:
+			if min2 == 'a':
+				min2 = item
+			elif item < min2:
+				min2 = item
+	response = (abs(max1 - min1) + abs(max2 - min2))/2
+
+	print 'Response: ' + str(response) + 'nT, +/-' + str(rougherror)
 
 # combines and plots two matching fluxgate readouts in the following manner:
 # x = x1 + x2
@@ -85,19 +131,18 @@ def plotFlux(t, x, y, z):
 
 def readout(x1, y1, z1, t1, x2, y2, z2, t2):
 
-    if (len(data1) != len(data2)):
-        print "Error: files do not match"
-        return -1
-
-    for idx in range(0, len(data1)):
+    for idx in range(0, len(x2)):
         x1[idx] = x1[idx] + x2[idx]
         y1[idx] = y1[idx] - y2[idx]
         z1[idx] = z1[idx] + z2[idx]
 
+    analyze(x1, y1, z1, t1)
+
     plotFlux(t1, x1, y1, z1)
 
 def main():
-	file1 = readFile('/ucnscr/mpalmer/gradiodata/14.56-21.04.2017solenoidoff/IN1.Dat')
-	file2 = readFile('/ucnscr/mpalmer/gradiodata/14.56-21.04.2017solenoidoff/IN2.Dat')
+	file1 = readFile('/ucnscr/mpalmer/gradiodata/laptoptests/runs/200mVplastic/IN1.Dat')
+	file2 = readFile('/ucnscr/mpalmer/gradiodata/laptoptests/runs/200mVplastic/IN2.Dat') 
 
-	readout(file1[1], file1[2], file1[3], halfTimes[file1[0]], file2[1], file2[2], file2[3], file2[0])
+	readout(file1[1], file1[2], file1[3], file1[0], file2[1], file2[2], file2[3], file2[0])
+

@@ -25,6 +25,17 @@ def readFile(filename):
     f.close()
     return times, x, y, z
 
+
+def rollingAvg(meas, points):
+	avgmeas = []
+	for num, item in enumerate(meas):
+		if num > points/2 and num < len(meas) - points/2:
+			avgmeas.append(sum(meas[num-points/2:num+points/2]) / len(meas[num-points/2:num+points/2]))
+	return avgmeas
+
+def getRollingTime(time, points):
+	return time[points/2+1:len(time)-points/2]
+
 # transmutes time axis to fold in quarters
 
 def quarterTimes(lst):
@@ -53,6 +64,13 @@ def halfTimes(lst):
 # time axis is whole of measurement time
 
 def plotFlux(t, x, y, z):
+
+    print type(x)
+
+    x = rollingAvg(x, 50)
+    y = rollingAvg(y, 50)
+    z = rollingAvg(z, 50)
+    t = getRollingTime(t, 50)
 
     print 'Plotting'
 
@@ -139,6 +157,13 @@ def readout(x1, y1, z1, t1, x2, y2, z2, t2):
     analyze(x1, y1, z1, t1)
 
     plotFlux(t1, x1, y1, z1)
+
+def temp(txt):
+	file1 = readFile('/ucnscr/mpalmer/gradiodata/laptoptests/runs/' + txt +'plastic/IN1.Dat')
+	
+	file2 = readFile('/ucnscr/mpalmer/gradiodata/laptoptests/runs/' + txt +'plastic/IN2.Dat')
+
+	readout(file1[1], file1[2], file1[3], file1[0], file2[1], file2[2], file2[3], file2[0])
 
 def main():
 	file1 = readFile('/ucnscr/mpalmer/gradiodata/laptoptests/runs/200mVplastic/IN1.Dat')

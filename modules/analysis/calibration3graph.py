@@ -157,10 +157,6 @@ def readout(x1, y1, z1, t1, x2, y2, z2, t2):
 
     print 'Error in Z-axis measurement: +/-' + str(getError(z1)/50.0) + 'nT'
 	
-    x1 = rollingAvg(x1, 50)
-    y1 = rollingAvg(y1, 50)
-    z1 = rollingAvg(z1, 50)
-    t1 = getRollingTime(t1, 50)
  
     analyze(x1, y1, z1, t1)
 
